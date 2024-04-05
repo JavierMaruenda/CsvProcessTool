@@ -5,12 +5,18 @@ import sys
 import csv
 import json
 import os
+import subprocess
 
-# Get the file name from the POST request
+# Get the data file name from the POST request
 form = cgi.FieldStorage()
 fileName = form.getvalue("file", "")
-csvFilePath = os.path.abspath("../../user/input/" + fileName)
 
+# Form all required file paths
+csvFilePath = os.path.abspath("../../user/data/" + fileName)
+processedcsvFilePath = os.path.abspath("../../user/data/processed/" + fileName)
+cppExecPath = "./../../cpp/bin/processData"
+
+# Initialize output
 print("Content-Type: application/json")
 print()
 
@@ -20,8 +26,12 @@ data = []
 
 # Call the specified executable passing the number as an argument
 try:
+    # Process the data with the c++ executable
+    process = subprocess.Popen([cppExecPath, csvFilePath], stdout=subprocess.PIPE)
+    process.wait()
+
     # Read data from the CSV file
-    with open(csvFilePath, "r") as file:
+    with open(processedcsvFilePath, "r") as file:
         reader = csv.reader(file)
         # Read the first row containing channel names
         names = next(reader)
