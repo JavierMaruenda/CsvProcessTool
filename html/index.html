@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CsvProcessTool</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+    <h1>CsvProcessTool</h1>
+    <a href="newpage.html">This is the new file</a>
+    <br><br>
+    <input type="file" id="inputFile">
+    <button onclick="processOperation()">Load data</button>
+    <div id="plot"></div>
+    <br>
+    <label for="xDataSelect">Select X Data:</label>
+    <select id="xDataSelect" onchange="updatePlot()">
+    </select>
+    <label for="yDataSelect">Select Y Data:</label>
+    <select id="yDataSelect" onchange="updatePlot()">
+    </select>
+    <p id="result"></p>
+
+    <script>
+        var data; // Global variable to store JSON data
+        var xData, yData;
+
+        function processOperation() {
+            var fileInput = document.getElementById("inputFile");
+            var fileName = fileInput.files[0].name; // Get only the file name
+
+            // Send the number and file name to the server
+            $.post("scripts/process.py", {file: fileName }, function(responseData) {
+                data = responseData; // Store the JSON data globally
+                // Update the result on the webpage
+                $("#result").text(JSON.stringify(data, null, 4));
+
+                // Populate the X Data and Y Data dropdowns
+                var names = data.names;
+                populateDropdown("xDataSelect", names);
+                populateDropdown("yDataSelect", names);
+
+                // Initialize the dropdowns with the first and second elements respectively
+                document.getElementById("xDataSelect").selectedIndex = 0;
+                document.getElementById("yDataSelect").selectedIndex = 1;
+
+                // Extract the data for initial plot
+                xData = data.data[0];
+                yData = data.data[1];
+
+                // Plot the initial data using Plotly
+                plotData(xData, yData);
+
+                // Call updatePlot to ensure plot is updated with initial data
+                updatePlot();
+            });
+        }
+
+        function populateDropdown(selectId, options) {
+            var select = $("#" + selectId);
+            select.empty();
+            options.forEach(function(option) {
+                select.append($("<option>").text(option));
+            });
+        }
+
+        function updatePlot() {
+            var xSelect = document.getElementById("xDataSelect");
+            var ySelect = document.getElementById("yDataSelect");
+            var xChannel = xSelect.options[xSelect.selectedIndex].text;
+            var yChannel = ySelect.options[ySelect.selectedIndex].text;
+
+            // Find index of selected channels in names array
+            var xIndex = data.names.indexOf(xChannel);
+            var yIndex = data.names.indexOf(yChannel);
+
+            // Extract data for selected channels
+            xData = data.data[xIndex];
+            yData = data.data[yIndex];
+
+            // Update x and y axes labels
+            var layoutUpdate = {
+                "xaxis.title.text": xChannel,
+                "yaxis.title.text": yChannel,
+                "title.text": data.fileName + ": " + yChannel + " vs " + xChannel
+            };
+
+            // Update plot data and layout
+            Plotly.restyle('plot', { x: [xData], y: [yData] });
+            Plotly.relayout('plot', layoutUpdate);
+        }
+
+        function plotData(xData, yData) {
+            var trace = {
+                x: xData,
+                y: yData,
+                mode: 'lines',
+                type: 'scatter'
+            };
+            var layout = {
+                title: 'Plot of Selected Data',
+                xaxis: {
+                    title: 'X Data'
+                },
+                yaxis: {
+                    title: 'Y Data'
+                }
+            };
+            var plotData = [trace];
+            Plotly.newPlot('plot', plotData, layout);
+        }
+    </script>
+</body>
+</html>
