@@ -14,7 +14,7 @@ fileName = form.getvalue("file", "")
 # Form all required file paths
 csvFilePath = os.path.abspath("../../user/data/" + fileName)
 processedcsvFilePath = os.path.abspath("../../user/data/processed/" + fileName)
-cppExecPath = "./../../cpp/bin/processData"
+cppExecPath = "../../cpp/bin/processData"
 
 # Initialize output
 print("Content-Type: application/json")
