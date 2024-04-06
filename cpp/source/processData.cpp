@@ -21,14 +21,14 @@ public:
         // Debug: Print the file being read
         ifstream file(filename);
         if (!file.is_open()) {
-            cerr << "Error: Unable to open file: " << filename << endl;
+            cerr << "Error: Unable to open file: " << filename << "<br>";
             exit(EXIT_FAILURE);
         }
 
         // Read the first row containing column names
         string line;
         if (!getline(file, line)) {
-            cerr << "Error: Empty file or unable to read column names from file: " << filename << endl;
+            cerr << "Error: Empty file or unable to read column names from file: " << filename << "<br>";
             exit(EXIT_FAILURE);
         }
         columnNames = split(line, ',');
@@ -56,14 +56,14 @@ public:
                     double value = stod(tokens[i]);
                     dataMap[columnNames[i]][currentRow] = value;
                 } catch (const invalid_argument& e) {
-                    cerr << "Error: Invalid data format in file: " << filename << ", at row: " << currentRow + 1 << ", column: " << i + 1 << endl;
+                    cerr << "Error: Invalid data format in file: " << filename << ", at row: " << currentRow + 1 << ", column: " << i + 1 << "<br>";
                     exit(EXIT_FAILURE);
                 }
             }
             ++currentRow;
         }
 
-        cerr << "Successfully read data from file: " << filename << endl;
+        cerr << "Successfully read data from file: " << filename << "<br>";
     }
 
     void addVector(const string& newVectorName) {
@@ -86,7 +86,7 @@ public:
 
         ofstream outFile(outputPath);
         if (!outFile.is_open()) {
-            cerr << "Error: Unable to open file for writing: " << outputPath << endl;
+            cerr << "Error: Unable to open file for writing: " << outputPath << "<br>";
             return;
         }
 
@@ -110,7 +110,7 @@ public:
         }
 
         outFile.close();
-        cerr << "Data saved" <<  endl;
+        cerr << "Data saved" <<  "<br>";
     }
 
 private:
@@ -127,16 +127,18 @@ private:
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        cerr << "Usage: " << argv[0] << " <filename>" << endl;
+        cerr << "<br>Usage: " << argv[0] << " <filename>" << "<br>";
         return 1;
     }
-
+    cerr << "<br>";
     string filename = argv[1];
-    cerr << "Attempting to read data from file: " << filename << endl;
+    cerr << "Attempting to read data from file: " << filename << "<br>";
     dataset data(filename);
+    cerr << "Computing new Channel test" << "<br>";
     data.addVector("test");
     data.dataMap["test"] = data.dataMap["chnA"] + data.dataMap["chnB"];
+    cerr << "Saving file" << "<br>";
     data.saveToCSV(filename);
-
+    cerr << "File saved successfully" << "<br>";
     return 0;
 }

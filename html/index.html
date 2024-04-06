@@ -6,7 +6,6 @@
     <title>CsvProcessTool</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
 </head>
 <body>
     <h1>CsvProcessTool</h1>
@@ -22,7 +21,8 @@
     <label for="yDataSelect">Select Y Data:</label>
     <select id="yDataSelect" onchange="updatePlot()">
     </select>
-    <p id="result"></p>
+    <!-- Use <div> elements to display JSON output -->
+    <div id="result"></div>
 
     <script>
         var data; // Global variable to store JSON data
@@ -35,8 +35,9 @@
             // Send the number and file name to the server
             $.post("scripts/process.py", {file: fileName }, function(responseData) {
                 data = responseData; // Store the JSON data globally
-                // Update the result on the webpage
-                $("#result").text(JSON.stringify(data, null, 4));
+
+                // Display JSON data
+                displayJson(data);
 
                 // Populate the X Data and Y Data dropdowns
                 var names = data.names;
@@ -111,6 +112,21 @@
             };
             var plotData = [trace];
             Plotly.newPlot('plot', plotData, layout);
+        }
+
+        function displayJson(jsonData) {
+            var resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = ""; // Clear previous content
+
+            // Iterate over JSON object and create <div> elements for each key-value pair
+            for (var key in jsonData) {
+                if (jsonData.hasOwnProperty(key)) {
+                    var value = jsonData[key];
+                    var keyValueDiv = document.createElement("div");
+                    keyValueDiv.innerHTML = "<strong>" + key + ":</strong> " + JSON.stringify(value);
+                    resultDiv.appendChild(keyValueDiv);
+                }
+            }
         }
     </script>
 </body>
