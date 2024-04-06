@@ -11,16 +11,29 @@
     <h1>CsvProcessTool</h1>
     <a href="newpage.html">This is the new file</a>
     <br><br>
+    <label>Select csv file to process: </label>
     <input type="file" id="inputFile">
-    <button onclick="processOperation()">Load data</button>
-    <div id="plot"></div>
+    <br><br>
+    <p>Data processing commands:</p>
+    <textarea id="textInput" rows="26" cols="50" placeholder="Data process"></textarea>
     <br>
+    <input type="file" id="fileInput" style="display:none">
+    <!-- Button to trigger file selection -->
+    <button onclick="document.getElementById('fileInput').click()">Load</button>
+    <button onclick="saveText()">Save</button>
+    <br><br>
+    <label>Process and load the data: </label>
+    <button onclick="processOperation()">Start</button>
+    <br><br>
+    <p>Visualize your data: </p>
     <label for="xDataSelect">Select X Data:</label>
     <select id="xDataSelect" onchange="updatePlot()">
     </select>
     <label for="yDataSelect">Select Y Data:</label>
     <select id="yDataSelect" onchange="updatePlot()">
     </select>
+    <div id="plot"></div>
+    <br>
     <!-- Use <div> elements to display JSON output -->
     <div id="result"></div>
 
@@ -31,9 +44,10 @@
         function processOperation() {
             var fileInput = document.getElementById("inputFile");
             var fileName = fileInput.files[0].name; // Get only the file name
+            var userProcess = document.getElementById("textInput").value; // Get user process
 
             // Send the number and file name to the server
-            $.post("scripts/process.py", {file: fileName }, function(responseData) {
+            $.post("scripts/process.py", {file: fileName, text: userProcess}, function(responseData) {
                 data = responseData; // Store the JSON data globally
 
                 // Display JSON data
@@ -127,6 +141,35 @@
                     resultDiv.appendChild(keyValueDiv);
                 }
             }
+        }
+
+        // Function to handle file selection and loading content to textarea
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var content = event.target.result;
+                document.getElementById('textInput').value = content;
+            };
+            reader.readAsText(file);
+        });
+
+        // Function to save text content using AJAX
+        function saveText() {
+            // Prompt the user for a custom file name
+
+            var fileName = prompt("Enter file name:", "process.txt");
+            if (fileName == null || fileName === "") {
+                // Do nothing if the user cancels or provides an empty file name
+                return;
+            }
+
+            // Get the text content from the textarea
+            var textContent = document.getElementById("textInput").value;
+            // Send the text content and file name to the server
+            $.post("scripts/saveProcess.py", {text: textContent, filename: fileName}, function(response) {
+                alert(response); // Alert success message or handle response
+            });
         }
     </script>
 </body>

@@ -11,6 +11,7 @@ from io import StringIO
 # Get the data file name from the POST request
 form = cgi.FieldStorage()
 fileName = form.getvalue("file", "")
+userProcess = form.getvalue("text", "")
 
 # Form all required file paths
 csvFilePath = os.path.abspath("../../user/data/" + fileName)
@@ -27,7 +28,7 @@ data = []
 errors = ""
 
 # Call permissions.sh (Ensures process folder has write permission)
-subprocess.run(["bash", "../../config/permissions.sh"])
+# subprocess.run(["bash", "../../config/permissions.sh"])
 
 # Call the specified executable passing the number as an argument
 try:
@@ -58,6 +59,7 @@ try:
         "fileName": fileName,
         "names": names,
         "data": data,
+        "userProcess": userProcess,
         "processLog": errors  # Include errors in the JSON output
     }
 
