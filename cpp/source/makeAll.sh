@@ -4,7 +4,7 @@
 destination="../bin"
 
 # Source files without extension
-sources=("processData")
+sources=("processData" "writeFile")
 
 # Compile and move each source file
 for file in "${sources[@]}"; do

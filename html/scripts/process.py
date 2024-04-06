@@ -27,17 +27,28 @@ names = []
 data = []
 errors = ""
 
-# Call permissions.sh (Ensures process folder has write permission)
-# subprocess.run(["bash", "../../config/permissions.sh"])
+# Call permissions.sh (Not working when called from python)
+# subprocess.run(["bash", "../../permissions.sh"])
 
-# Call the specified executable passing the number as an argument
 try:
+    # Modify and compile the C++ file before executing
+    process = subprocess.run(["bash", "./compileCpp.sh", userProcess], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # Capture errors from stderr
+    errors = process.stderr.decode("utf-8")
+
+    if process.returncode == 0:
+        errors = "Compilation successful<br>"
+    else:
+        errors = errors.replace('\n', '<br>')
+        raise Exception(errors)
+
     # Process the data with the c++ executable
     process = subprocess.Popen([cppExecPath, csvFilePath], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, err = process.communicate()
 
     # Capture errors from stderr
-    errors = err.decode("utf-8")
+    errors = errors + err.decode("utf-8")
+    errors = errors.replace('\n', '<br>')
 
     if process.returncode != 0:
         raise Exception(errors)
@@ -67,5 +78,5 @@ try:
     print(json.dumps(json_data))
 except Exception as e:
     # Print any exceptions raised
-    print(json.dumps({"error": str(e), "errors": errors}))
+    print(json.dumps({"errors": errors}))
     sys.exit(1)

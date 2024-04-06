@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
     string filename = argv[1];
 
     // Process data
-    test
+    <<DATAPROCESS>>
 
     // Save file
     data.saveToCSV(filename);
