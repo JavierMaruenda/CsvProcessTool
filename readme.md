@@ -9,4 +9,6 @@ There are some bash files in the config folder to help the initial setup of an a
 
 IMPORTANT: The tool is intended for local use only. It processes the data by modifying and re-compiling C++ scripts which is a security vulnerability which would allow atackers to run malicious code.
 
-[screenshot](./img/screenshot.jpg)
+<p align="center">
+  <img src="./img/screenshot.jpg" width="700">
+</p>
