@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 
 int main(int argc, char *argv[]) {
     // Check if the correct number of arguments is provided
@@ -24,6 +25,9 @@ int main(int argc, char *argv[]) {
 
     // Close the file
     file.close();
+
+    // Set file permissions to 777
+    chmod(filename.c_str(), 0777);
 
     // Indicate success
     std::cout << "String successfully written to " << filename << std::endl;

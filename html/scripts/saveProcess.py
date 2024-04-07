@@ -15,11 +15,6 @@ filename = form.getvalue("filename", "unnamed.txt")  # Default filename if not p
 # Construct the full path to save the file
 filepath = os.path.abspath("../../user/processes/" + filename)
 
-# Save the text content to the file
-#with open(filepath, 'w') as file:
-#    file.write(text_content)
-#os.chmod(filepath, 0o777)
-
 process = subprocess.Popen(["../../cpp/bin/writeFile", filepath, text_content], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 # Print a success message or any relevant output

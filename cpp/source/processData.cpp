@@ -137,8 +137,11 @@ int main(int argc, char *argv[]) {
     }
     string filename = argv[1];
 
+    // Initialize dataset from file
+    dataset data(filename);
+
     // Process data
-    test
+    
 
     // Save file
     data.saveToCSV(filename);
