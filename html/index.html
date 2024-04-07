@@ -143,17 +143,6 @@
             }
         }
 
-        // Function to handle file selection and loading content to textarea
-        /*document.getElementById('fileInput').addEventListener('change', function(event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var content = event.target.result;
-                document.getElementById('textInput').value = content;
-            };
-            reader.readAsText(file, 'UTF-8');
-        });*/
-
         document.getElementById('fileInput').addEventListener('change', function(event) {
             var fileInput = document.getElementById("fileInput");
             var fileName = fileInput.files[0].name; // Get only the file name
@@ -163,13 +152,8 @@
                 var fileContent = responseData.content;
                 // Now you can use the file content
                 document.getElementById('textInput').value = fileContent;
-                alert(fileContent)
             })
         })
-
-
-
-
 
         // Function to save text content using AJAX
         function saveText() {

@@ -1,0 +1,2 @@
+data.addVector("sample");
+data.dataMap["sample"] = data.dataMap["chnA"] + data.dataMap["chnB"];
