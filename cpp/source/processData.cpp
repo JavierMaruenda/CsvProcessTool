@@ -141,7 +141,8 @@ int main(int argc, char *argv[]) {
     dataset data(filename);
 
     // Process data
-    
+    data.addVector("sample");
+data.dataMap["sample"] = data.dataMap["chnA"] + data.dataMap["chnB"];
 
     // Save file
     data.saveToCSV(filename);

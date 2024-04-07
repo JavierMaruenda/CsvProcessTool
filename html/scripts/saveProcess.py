@@ -16,6 +16,7 @@ filename = form.getvalue("filename", "unnamed.txt")  # Default filename if not p
 filepath = os.path.abspath("../../user/processes/" + filename)
 
 process = subprocess.Popen(["../../cpp/bin/writeFile", filepath, text_content], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = process.communicate()  # Capture stdout and stderr
 
 # Print a success message or any relevant output
 print("Content-Type: text/html")

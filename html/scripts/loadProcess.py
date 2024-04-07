@@ -17,8 +17,12 @@ print("Content-Type: application/json")
 print()
 
 # Read the file content
-with open(filepath, 'r') as file:
-    content = file.read()
+#with open(filepath, 'r') as file:
+#    content = file.read()
+
+process = subprocess.Popen(["../../cpp/bin/readFile", filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = process.communicate()  # Capture stdout and stderr
+content = stdout.decode().strip()
 
 # Send the response back as JSON
 response = {"content": content}
