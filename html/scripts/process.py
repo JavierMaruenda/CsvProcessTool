@@ -35,6 +35,7 @@ try:
     process = subprocess.run(["bash", "./compileCpp.sh", userProcess], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     # Capture errors from stderr
     errors = process.stderr.decode("utf-8")
+    userProcess = userProcess.replace('\n', '<br>')
 
     if process.returncode == 0:
         errors = "Compilation successful<br>"

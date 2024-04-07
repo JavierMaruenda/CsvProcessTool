@@ -6,10 +6,28 @@
     <title>CsvProcessTool</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            margin: 20px; /* Add lateral margins */
+        }
+
+        .header {
+            background-color: #3498db; /* Blue background */
+            padding: 10px; /* Add padding to the header */
+            color: white; /* White text color */
+        }
+
+        #textInput {
+            width: calc(100% - 20px); /* Use available width excluding margins */
+            margin-right: 10px; /* Add right margin */
+        }
+    </style>
 </head>
 <body>
-    <h1>CsvProcessTool</h1>
-    <a href="newpage.html">This is the new file</a>
+    <div class="header">
+        <h1>CsvProcessTool</h1>
+        <a href="newpage.html">This is the new file</a>
+    </div>
     <br><br>
     <label>Select csv file to process: </label>
     <input type="file" id="inputFile">
@@ -122,11 +140,37 @@
                 },
                 yaxis: {
                     title: 'Y Data'
-                }
+                },
             };
             var plotData = [trace];
             Plotly.newPlot('plot', plotData, layout);
+            var plotDiv = document.getElementById('plot');
+            var aspectRatio = 16 / 9; // Aspect ratio 16:9
+            // Get the width of the plot container
+            var width = plotDiv.offsetWidth;
+
+            // Set the height of the plot container based on the width and aspect ratio
+            plotDiv.style.height = width / aspectRatio + 'px';
+
+            // Resize the plot
+            Plotly.Plots.resize(plotDiv);
+
         }
+
+        // Resize plot on window resize while maintaining aspect ratio
+        window.addEventListener('resize', function() {
+            var plotDiv = document.getElementById('plot');
+            var aspectRatio = 16 / 9; // Aspect ratio 16:9
+            // Get the width of the plot container
+            var width = plotDiv.offsetWidth;
+
+            // Set the height of the plot container based on the width and aspect ratio
+            plotDiv.style.height = width / aspectRatio + 'px';
+
+            // Resize the plot
+            Plotly.Plots.resize(plotDiv);
+        });
+
 
         function displayJson(jsonData) {
             var resultDiv = document.getElementById("result");
