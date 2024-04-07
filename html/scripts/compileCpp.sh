@@ -11,6 +11,8 @@ sourceCode=$(<"$templatePath")
 finalCode="${sourceCode//<<DATAPROCESS>>/$1}"
 
 # Write the modified content back to file B
+rm -f "../../cpp/source/processData.cpp"
 echo "$finalCode" > "$finalPath"
 
 g++ -o "../../cpp/bin/processData" "../../cpp/source/processData.cpp"
+rm -f "../../cpp/source/processData.cpp"
